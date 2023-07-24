@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strconv"
 	"time"
 	"vaja1/API"
 	"vaja1/DB/MariaDB"
@@ -15,11 +16,11 @@ import (
 
 func main() {
 	db := &MariaDB.MariaDB{
-		User:     getEnv("DBUSER", "root"),
-		Pass:     getEnv("DBPASS", "superSecretPass"),
-		IP:       getEnv("DBIP", "127.0.0.1"),
-		Port:     3306,
-		Database: getEnv("DBNAME", "test"),
+		User:     getEnvStr("DBUSER", "root"),
+		Pass:     getEnvStr("DBPASS", "superSecretPass"),
+		IP:       getEnvStr("DBIP", "127.0.0.1"),
+		Port:     getEnvInt("DBPORT", 3306),
+		Database: getEnvStr("DBNAME", "test"),
 	} // Ce podatki za povezavo z db niso v envVar, uporabimo default vrednosti
 	err := db.Init()
 	if err != nil {
@@ -85,9 +86,17 @@ func main() {
 
 }
 
-func getEnv(key, fallback string) string {
+func getEnvStr(key, fallback string) string {
 	if value, ok := os.LookupEnv(key); ok {
 		return value
 	}
 	return fallback
+}
+
+func getEnvInt(key string, fallback int) int {
+	value, err := strconv.Atoi(os.Getenv(key))
+	if value == 0 || err != nil {
+		return fallback
+	}
+	return value
 }
