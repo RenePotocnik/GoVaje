@@ -71,6 +71,14 @@ func (db *MariaDB) GetTaskById(taskId int) (task DataStructures.Task, err error)
 	return
 }
 
+func (db *MariaDB) PutTaskById(taskId int, task DataStructures.Task) (err error) {
+	_, err = db.database.Exec("UPDATE task SET title = ?, description = ?, predicted_date = ? WHERE id = ?", task.Title, task.Description, task.PredictedDate, taskId)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	return
+}
+
 // CreateTask creates a new task in the database
 func (db *MariaDB) CreateTask(task DataStructures.Task) (err error) {
 	_, err = db.database.Exec("INSERT INTO task (title, description, date_added, predicted_date) VALUES (?, ?, ?, ?)", task.Title, task.Description, task.DateAdded, task.PredictedDate)

@@ -38,6 +38,29 @@ func (a *Controller) GetTaskById(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+func (a *Controller) PutTaskById(c *gin.Context) {
+	// Get the ID from the URL and convert it to int
+	taskId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		// Return error 400 - Bad request if the ID is not a number
+		c.String(http.StatusBadRequest, err.Error())
+		return
+	}
+	var task DataStructures.Task
+	// Read the data from the request into the object
+	err = c.BindJSON(&task)
+	if err != nil {
+		c.String(http.StatusBadRequest, err.Error())
+		return
+	}
+	err = a.c.PutTaskById(taskId, task)
+	if err != nil {
+		c.String(http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.String(http.StatusOK, "Task updated")
+}
+
 func (a *Controller) CreateTask(c *gin.Context) {
 	var task DataStructures.Task
 	// Read the data from the request into the object
@@ -52,4 +75,20 @@ func (a *Controller) CreateTask(c *gin.Context) {
 		return
 	}
 	c.String(http.StatusOK, "Task created")
+}
+
+func (a *Controller) DeleteTask(c *gin.Context) {
+	// Get the ID from the URL and convert it to int
+	taskId, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		// Return error 400 - Bad request if the ID is not a number
+		c.String(http.StatusBadRequest, err.Error())
+		return
+	}
+	err = a.c.DeleteTask(taskId)
+	if err != nil {
+		c.String(http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.String(http.StatusOK, "Task deleted")
 }
