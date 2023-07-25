@@ -7,16 +7,14 @@ import (
 )
 
 func (db *MariaDB) GetTasks() (tasks []DataStructures.Task, err error) {
-
-	// Naredimo query na bazo
-	// Za stavke, od katerih ne pričakujemo odgovora (UPDATE, INSERT) uporabimo namesto "Query", "Exec"
+	// For statements that do not return a result (such as INSERT, UPDATE, and DELETE), use `Exec` instead of `Query`.
 	rows, err := db.database.Query("SELECT id, title, description, date_added, predicted_date from task")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 
-	// Zapremo vrstice, ko je funkcija končana
+	// Close the rows when the function ends
 	defer func() {
 		err2 := rows.Close()
 		if err2 != nil {
@@ -24,27 +22,22 @@ func (db *MariaDB) GetTasks() (tasks []DataStructures.Task, err error) {
 		}
 	}()
 
-	// Ustvarimo objekt User in neomejen array tipa User
+	// Create task object and an undefined array of tasks
 	var task DataStructures.Task
 	tasks = make([]DataStructures.Task, 0)
 
-	// Loop čez vse vrstice
+	// Loop through all rows
 	for rows.Next() {
-
-		// Preberemo podatke vrstice v objekt
+		// Read the data from the row into the task object
 		err = rows.Scan(&task.Id, &task.Title, &task.Description, &task.DateAdded, &task.PredictedDate)
 		if err != nil {
 			fmt.Println(err.Error())
 			return
 		}
-
-		// Dodamo objekt user na konec arraya users
+		// Add the task user to the tasks array
 		tasks = append(tasks, task)
-
 	}
-	// Vrnemo podatke. Ne rabimo napisat katero spremenljivko vrnemo saj je ta definirana in inicializirana na vrhu funkcije
 	return
-
 }
 
 func (db *MariaDB) GetTaskById(taskId int) (task DataStructures.Task, err error) {
@@ -78,10 +71,8 @@ func (db *MariaDB) GetTaskById(taskId int) (task DataStructures.Task, err error)
 	return
 }
 
-// CreateTask ustvari nov task v bazi
+// CreateTask creates a new task in the database
 func (db *MariaDB) CreateTask(task DataStructures.Task) (err error) {
-	// Naredimo query na bazo
-	// Za stavke, od katerih ne pričakujemo odgovora (UPDATE, INSERT) uporabimo namesto "Query", "Exec"
 	_, err = db.database.Exec("INSERT INTO task (title, description, date_added, predicted_date) VALUES (?, ?, ?, ?)", task.Title, task.Description, task.DateAdded, task.PredictedDate)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -89,7 +80,7 @@ func (db *MariaDB) CreateTask(task DataStructures.Task) (err error) {
 	return
 }
 
-// DeleteTask izbriše task z podanim id-jem iz baze
+// DeleteTask deletes a task from the database given the task ID
 func (db *MariaDB) DeleteTask(taskId int) (err error) {
 	_, err = db.database.Exec("DELETE FROM task WHERE id = ?", taskId)
 	if err != nil {

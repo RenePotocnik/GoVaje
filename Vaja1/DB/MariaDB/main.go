@@ -19,37 +19,33 @@ type MariaDB struct {
 
 func (db *MariaDB) Init() (err error) {
 
-	// Odpremo povezavo do baze
+	// Open a connection to the database
 	db.database, err = sql.Open("mysql", db.User+":"+db.Pass+"@tcp("+db.IP+":"+strconv.Itoa(db.Port)+")/"+db.Database+"?multiStatements=true&parseTime=true")
 	if err != nil {
 		fmt.Println(err.Error())
 		return
 	}
 
-	// Preverimo povezavo z bazo. Če ni vzpostavljena probamo vsakih 5 sekund
+	// Check the connection. Retry every 5 seconds until it succeeds
 	for {
 		err = db.database.Ping()
 		if err == nil {
-			break // Ce ni napak pomeni, da je povezava vzpostavljena
+			break
 		}
-		fmt.Println("Database not ready")
+		fmt.Println("Database not ready, retrying in 5 seconds...")
 		<-time.After(5 * time.Second)
 	}
-
-	// Neuporabljene povezave se avtomatsko zaprejo
+	// Unused connections are closed automatically
 	db.database.SetMaxIdleConns(0)
 
-	// Max število povezav se nastavi glede na bazo in potrebe. MariaDB ima default 100 povezav.
+	// MariaDB default `MaxOpenConns == 100`. Set this value to the needs of the application
 	db.database.SetMaxOpenConns(50)
 
-	// Migracije baze
+	// Database migrations
 	m := migrator{database: db.database, definitions: definitions}
 	err = m.Migrate()
 	if err != nil {
 		fmt.Println(err.Error())
-		return
 	}
-
 	return
-
 }

@@ -145,13 +145,9 @@ func (m *migrator) setVersion(version float64) (err error) {
 
 	_, err = statement.Exec(version)
 	if err != nil {
-
 		fmt.Println(err.Error())
-
 	}
-
 	return
-
 }
 
 var createVersionsTable = `

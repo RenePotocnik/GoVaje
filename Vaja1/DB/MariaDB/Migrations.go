@@ -1,8 +1,8 @@
 package MariaDB
 
 /*
-Definicije za migracije baze.
-Kadar želimo nekaj spremenit dodamo novi objekt v array z višjo verzijo
+Definition for database migration
+Whenever we want to change something we add a new object to the array with a higher version
 */
 var definitions = []migrationDefinition{
 	{

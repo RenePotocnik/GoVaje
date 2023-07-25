@@ -5,20 +5,18 @@ import (
 	"vaja1/API"
 )
 
-// Naredimo Router objekt, da na njega obesimo funkcije
+// Create a Router struct and bind functions to it
 type Router struct {
 	engine *gin.Engine
 	api    API.Controller
 }
 
 func (r *Router) registerRoutes() (err error) {
-
-	// Pot /api/v1
+	// Path to `/api/v1`
 	api := r.engine.Group("/api/v1")
 
-	// Pot /api/v1/user
-	user := api.Group("/user")
-	r.registerUserRoutes(user)
+	// user := api.Group("/user")
+	// r.registerUserRoutes(user)
 
 	todo := api.Group("/todo")
 	r.registerTodoRoutes(todo)
@@ -28,23 +26,19 @@ func (r *Router) registerRoutes() (err error) {
 }
 
 func (r *Router) registerUserRoutes(user *gin.RouterGroup) {
-
-	// Pot /api/v1/user
+	// Path to `/api/v1/user`
 	user.GET("/", r.api.GetUsers)
 
-	// Pot /api/v1/user/:user_id
+	// Path to `/api/v1/user/:user_id`
 	user.GET("/:user_id", r.api.GetUserById)
-
 }
 
+// registerTodoRoutes registers routes for the to-do group
 func (r *Router) registerTodoRoutes(todo *gin.RouterGroup) {
-
-	// Pot /api/v1/task
+	// Path to `/api/v1/task`
 	todo.GET("/", r.api.GetTasks)
 
-	// Pot /api/v1/task/:task_id
+	// Path to `/api/v1/task/:task_id`
 	todo.GET("/:task_id", r.api.GetTaskById)
-
 	todo.POST("/", r.api.CreateTask)
-
 }

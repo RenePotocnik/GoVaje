@@ -42,12 +42,12 @@ func main() {
 		return
 	}
 
-	// Naredimo 2 kanala in enega od njih povežemo na sistemski exit signal
+	// Create 2 channels and connect one of them to the system exit signal
 	quit := make(chan os.Signal, 0)
 	done := make(chan bool, 0)
 	signal.Notify(quit, os.Interrupt)
 
-	// Definiramo port, handler in timeoute za HTTP server
+	// Define the port, handler and timeouts for the HTTP server
 	srv := &http.Server{
 		Addr:         ":80",
 		Handler:      router.engine,
@@ -55,9 +55,8 @@ func main() {
 		WriteTimeout: 30 * time.Second,
 	}
 
-	// V ločenem threadu čakamo na exit signal in nato izklopimo http server
+	// In a separate thread, wait for an interrupt signal and close the http server
 	go func() {
-
 		<-quit
 
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
@@ -68,12 +67,10 @@ func main() {
 			fmt.Println(err.Error())
 		}
 		close(done)
-
 	}()
 
-	// V ločenem threadu zaženemo HTTP server
+	// Start a new HTTP server in a separate thread
 	go func() {
-
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			fmt.Println(err.Error())
 		}
