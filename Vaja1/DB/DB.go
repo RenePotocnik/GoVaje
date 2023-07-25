@@ -10,4 +10,7 @@ type DB interface {
 
 	GetTasks() (tasks []DataStructures.Task, err error)
 	GetTaskById(id int) (task DataStructures.Task, err error)
+
+	CreateTask(task DataStructures.Task) (err error)
+	DeleteTask(taskId int) (err error)
 }

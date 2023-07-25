@@ -45,4 +45,6 @@ func (r *Router) registerTodoRoutes(todo *gin.RouterGroup) {
 	// Pot /api/v1/task/:task_id
 	todo.GET("/:task_id", r.api.GetTaskById)
 
+	todo.POST("/", r.api.CreateTask)
+
 }

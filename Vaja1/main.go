@@ -15,13 +15,14 @@ import (
 )
 
 func main() {
+	// Create a new MariaDB object with info to connect to the database
 	db := &MariaDB.MariaDB{
 		User:     getEnvStr("DBUSER", "root"),
 		Pass:     getEnvStr("DBPASS", "superSecretPass"),
 		IP:       getEnvStr("DBIP", "127.0.0.1"),
 		Port:     getEnvInt("DBPORT", 3306),
 		Database: getEnvStr("DBNAME", "test"),
-	} // Ce podatki za povezavo z db niso v envVar, uporabimo default vrednosti
+	}
 	err := db.Init()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -29,12 +30,12 @@ func main() {
 
 	logic := Logic.NewController(db)
 
-	// Kreiramo naš router objekt
+	// Create a router object
 	var router Router
 	router.engine = gin.Default()
 	router.api = API.NewController(logic)
 
-	// Registriramo HTTP REST API povezave
+	// Register HTTP routes
 	err = router.registerRoutes()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -80,23 +81,24 @@ func main() {
 
 	}()
 
-	// Čakamo na konec izvajanja. Vsi deli programa so sedaj zagnani v ločenih threadih.
-	// Dalje od tod pridemo samo če program izklopimo ali se zruži
+	// Wait for all programs to finish executing, or an interrupt
 	<-done
-
 }
 
+// getEnvStr returns the string value of the environment variable named by the `key`.
+// If the variable is not present in the environment, the fallback value is returned.
 func getEnvStr(key, fallback string) string {
-	if value, ok := os.LookupEnv(key); ok {
+	if value, found := os.LookupEnv(key); found {
 		return value
 	}
 	return fallback
 }
 
+// getEnvInt returns the int value of the environment variable named by the `key`.
+// If the variable is not present in the environment, the fallback value is returned.
 func getEnvInt(key string, fallback int) int {
-	value, err := strconv.Atoi(os.Getenv(key))
-	if value == 0 || err != nil {
-		return fallback
+	if value, err := strconv.Atoi(os.Getenv(key)); err == nil {
+		return value
 	}
-	return value
+	return fallback
 }

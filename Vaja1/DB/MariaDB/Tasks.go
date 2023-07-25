@@ -77,3 +77,23 @@ func (db *MariaDB) GetTaskById(taskId int) (task DataStructures.Task, err error)
 
 	return
 }
+
+// CreateTask ustvari nov task v bazi
+func (db *MariaDB) CreateTask(task DataStructures.Task) (err error) {
+	// Naredimo query na bazo
+	// Za stavke, od katerih ne pričakujemo odgovora (UPDATE, INSERT) uporabimo namesto "Query", "Exec"
+	_, err = db.database.Exec("INSERT INTO task (title, description, date_added, predicted_date) VALUES (?, ?, ?, ?)", task.Title, task.Description, task.DateAdded, task.PredictedDate)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	return
+}
+
+// DeleteTask izbriše task z podanim id-jem iz baze
+func (db *MariaDB) DeleteTask(taskId int) (err error) {
+	_, err = db.database.Exec("DELETE FROM task WHERE id = ?", taskId)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	return
+}
