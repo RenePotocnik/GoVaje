@@ -7,4 +7,7 @@ type DB interface {
 
 	GetUsers() (users []DataStructures.User, err error)
 	GetUserById(id int) (user DataStructures.User, err error)
+
+	GetTasks() (tasks []DataStructures.Task, err error)
+	GetTaskById(id int) (task DataStructures.Task, err error)
 }

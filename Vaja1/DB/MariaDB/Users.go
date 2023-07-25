@@ -10,7 +10,7 @@ import (
 func (db *MariaDB) GetUsers() (users []DataStructures.User, err error) {
 
 	// Naredimo query na bazo
-	// Za stavke, od katerih ne pričakujemo odgovora (UPDATE, INSERT) uporabimo namesto "Query" "Exec"
+	// Za stavke, od katerih ne pričakujemo odgovora (UPDATE, INSERT) uporabimo namesto "Query", "Exec"
 	rows, err := db.database.Query("SELECT user_id, username, email from user")
 	if err != nil {
 		fmt.Println(err.Error())

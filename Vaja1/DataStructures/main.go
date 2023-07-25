@@ -6,7 +6,7 @@ type User struct {
 	Email    string `json:"email"`
 }
 
-type Todo struct {
+type Task struct {
 	Id            int    `json:"id"`
 	Title         string `json:"title"`
 	Description   string `json:"description"`
