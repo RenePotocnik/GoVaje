@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -12,9 +13,25 @@ import (
 	"vaja1/API"
 	"vaja1/DB/MariaDB"
 	"vaja1/Logic"
+
+	"github.com/getsentry/sentry-go"
 )
 
 func main() {
+	err := sentry.Init(sentry.ClientOptions{
+		Dsn:              "https://examplePublicKey@o0.ingest.sentry.io/0",
+		AttachStacktrace: true,
+	})
+	if err != nil {
+		log.Fatalf("sentry.Init: %s", err)
+	}
+
+	// Defer function supposed to log the error to Sentry and flush the buffer after the program has run.
+	defer func() {
+		sentry.CaptureException(err)
+		sentry.Flush(2 * time.Second)
+	}()
+
 	// Create a new MariaDB object with info to connect to the database
 	db := &MariaDB.MariaDB{
 		User:     getEnvStr("DBUSER", ""),
@@ -23,7 +40,7 @@ func main() {
 		Port:     getEnvInt("DBPORT", 0),
 		Database: getEnvStr("DBNAME", ""),
 	}
-	err := db.Init()
+	err = db.Init()
 	if err != nil {
 		fmt.Println(err.Error())
 	}
