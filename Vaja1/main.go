@@ -17,11 +17,11 @@ import (
 func main() {
 	// Create a new MariaDB object with info to connect to the database
 	db := &MariaDB.MariaDB{
-		User:     getEnvStr("DBUSER", "root"),
-		Pass:     getEnvStr("DBPASS", "superSecretPass"),
-		IP:       getEnvStr("DBIP", "127.0.0.1"),
-		Port:     getEnvInt("DBPORT", 3306),
-		Database: getEnvStr("DBNAME", "test"),
+		User:     getEnvStr("DBUSER", ""),
+		Pass:     getEnvStr("DBPASS", ""),
+		IP:       getEnvStr("DBIP", ""),
+		Port:     getEnvInt("DBPORT", 0),
+		Database: getEnvStr("DBNAME", ""),
 	}
 	err := db.Init()
 	if err != nil {
