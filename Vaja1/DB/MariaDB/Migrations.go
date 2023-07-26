@@ -1,5 +1,10 @@
 package MariaDB
 
+import (
+	"database/sql"
+	"golang.org/x/crypto/bcrypt"
+)
+
 /*
 Definition for database migration
 Whenever we want to change something we add a new object to the array with a higher version
@@ -10,20 +15,34 @@ var definitions = []migrationDefinition{
 		Description: "Initial database creation",
 		Script:      createTask,
 	},
+	{
+		Version:        2,
+		Description:    "Add user table",
+		Script:         createUser,
+		PostScriptFunc: addUser,
+	},
 }
 
-// Initial database creation
-// var createDB = `
-// CREATE TABLE IF NOT EXISTS user(
-//     user_id INT NOT NULL AUTO_INCREMENT,
-//     username TEXT NOT NULL,
-//     pass_hash TEXT NOT NULL,
-//     email TEXT NOT NULL,
-//     PRIMARY KEY (user_id)
-// )
-// CHARACTER SET 'utf8mb4',
-// COLLATE 'utf8mb4_unicode_ci'
-// `
+func addUser(db *sql.DB) (err error) {
+	username := "demo"
+	password := "demo"
+
+	// Encrypt the password
+	pass_hash, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	if err != nil {
+		return err
+	}
+	_, err = db.Exec("INSERT INTO user (username, pass_hash) VALUES (?, ?)", username, pass_hash)
+	if err != nil {
+		return err
+	}
+
+	// Change the `user_id` of all the tasks to the ID of the newly created user
+	demo_user_id, err := db.Query("SELECT user_id FROM user WHERE username = ? AND pass_hash = ?", username, pass_hash)
+	_, err = db.Exec("UPDATE task SET user_id = ?", demo_user_id)
+
+	return nil
+}
 
 // Task table creation
 var createTask = `
@@ -36,4 +55,19 @@ CREATE TABLE IF NOT EXISTS task(
 )
 CHARACTER SET 'utf8mb4',
 COLLATE 'utf8mb4_unicode_ci'
-    `
+`
+
+// User table creation
+// Add `user_id` with a foreign key to `task` table
+var createUser = `
+CREATE TABLE IF NOT EXISTS user(
+    user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    username TEXT NOT NULL,
+    pass_hash TEXT NOT NULL
+)
+CHARACTER SET 'utf8mb4',
+COLLATE 'utf8mb4_unicode_ci'
+
+ALTER TABLE task ADD user_id INT NOT NULL;
+ALTER TABLE task ADD FOREIGN KEY task(user_id) REFERENCES user(user_id);
+`
