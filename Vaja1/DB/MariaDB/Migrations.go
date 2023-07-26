@@ -28,12 +28,11 @@ var definitions = []migrationDefinition{
 // Task table creation
 var createTask = `
 CREATE TABLE IF NOT EXISTS task(
-    id INT NOT NULL AUTO_INCREMENT,
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
     title TEXT NOT NULL,
     description TEXT NOT NULL,
-    date_added DATETIME NOT NULL,
-    predicted_date DATETIME NOT NULL,
-    PRIMARY KEY (id)
+    date_added TEXT NOT NULL,
+    predicted_date TEXT NOT NULL
 )
 CHARACTER SET 'utf8mb4',
 COLLATE 'utf8mb4_unicode_ci'

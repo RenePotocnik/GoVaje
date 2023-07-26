@@ -32,9 +32,9 @@ func (r *Router) registerTodoRoutes(todo *gin.RouterGroup) {
 	todo.POST("/", r.api.CreateTask)
 
 	// Paths to `/api/v1/task/:task_id`
-	todo.GET("/:task_id", r.api.GetTaskById)
-	todo.PUT("/:task_id", r.api.PutTaskById)
-	todo.DELETE("/:task_id", r.api.DeleteTask)
+	todo.GET("/:id", r.api.GetTaskById)
+	todo.PUT("/:id", r.api.PutTaskById)
+	todo.DELETE("/:id", r.api.DeleteTask)
 }
 
 func (r *Router) registerUserRoutes(user *gin.RouterGroup) {
