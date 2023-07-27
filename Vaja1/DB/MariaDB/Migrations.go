@@ -42,6 +42,7 @@ func addUser(db *sql.DB) (err error) {
 }
 
 // Task table creation
+// Foreign key added to `user_id` to reference to `user[user_id]`
 var createTask = `
 CREATE TABLE IF NOT EXISTS task(
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
@@ -49,13 +50,14 @@ CREATE TABLE IF NOT EXISTS task(
     description TEXT NOT NULL,
     date_added TEXT NOT NULL,
     predicted_date TEXT NOT NULL
+	user_id INT NOT NULL,
+	FOREIGN KEY (user_id) REFERENCES user(user_id)
 )
 CHARACTER SET 'utf8mb4',
 COLLATE 'utf8mb4_unicode_ci'
 `
 
 // User table creation
-// Add `user_id` with a foreign key to `task` table
 var createUser = `
 CREATE TABLE IF NOT EXISTS user(
     user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -64,7 +66,4 @@ CREATE TABLE IF NOT EXISTS user(
 )
 CHARACTER SET 'utf8mb4',
 COLLATE 'utf8mb4_unicode_ci'
-
-ALTER TABLE task ADD user_id INT NOT NULL;
-ALTER TABLE task ADD FOREIGN KEY task(user_id) REFERENCES user(user_id);
 `
