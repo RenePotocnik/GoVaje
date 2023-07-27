@@ -5,9 +5,9 @@ import (
 	"vaja1/DataStructures"
 )
 
-func (c *Controller) GetTasks() (tasks []DataStructures.Task, err error) {
+func (c *Controller) GetTasks(userID int) (tasks []DataStructures.Task, err error) {
 	// Because no checks are needed, we can directly return the result of the call to the database
-	return c.db.GetTasks()
+	return c.db.GetTasks(userID)
 }
 
 func (c *Controller) GetTaskById(taskId int) (task DataStructures.Task, err error) {

@@ -8,7 +8,7 @@ type DB interface {
 	Login(user DataStructures.User) (err error)
 	GetUserByUsername(username string) (user DataStructures.User, err error)
 
-	GetTasks() (tasks []DataStructures.Task, err error)
+	GetTasks(userID int) (tasks []DataStructures.Task, err error)
 	GetTaskById(id int) (task DataStructures.Task, err error)
 	PutTaskById(id int, task DataStructures.Task) (err error)
 

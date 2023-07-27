@@ -6,9 +6,9 @@ import (
 	"vaja1/DataStructures"
 )
 
-func (db *MariaDB) GetTasks() (tasks []DataStructures.Task, err error) {
+func (db *MariaDB) GetTasks(userID int) (tasks []DataStructures.Task, err error) {
 	// For statements that do not return a result (such as INSERT, UPDATE, and DELETE), use `Exec` instead of `Query`.
-	rows, err := db.database.Query("SELECT id, title, description, date_added, predicted_date from task")
+	rows, err := db.database.Query("SELECT id, title, description, date_added, predicted_date from task WHERE user_id = ?", userID)
 	if err != nil {
 		fmt.Println(err.Error())
 		return

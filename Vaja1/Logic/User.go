@@ -49,7 +49,7 @@ func GenerateToken(user DataStructures.User) (signedToken string, err error) {
 }
 
 // ValidateToken validates a given JWT token with the given user's id
-func ValidateToken(token string, user DataStructures.User) (valid bool, err error) {
+func ValidateToken(token string) (valid bool, userID int, err error) {
 	valid = false
 	claims := jwt.MapClaims{}
 	_, err = jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
@@ -59,17 +59,13 @@ func ValidateToken(token string, user DataStructures.User) (valid bool, err erro
 		return
 	}
 
-	// Check if the user's id matches the token's id
-	if int(claims["id"].(float64)) != user.Id {
-		err = fmt.Errorf("user id does not match the token's id")
-		return
-	}
-
 	// Check if the token has expired
 	if time.Unix(int64(claims["exp"].(float64)), 0).Before(time.Now()) {
 		err = fmt.Errorf("token has expired")
 		return
 	}
+
+	userID = int(claims["id"].(float64))
 
 	// The token is valid
 	valid = true
@@ -87,10 +83,4 @@ func (c *Controller) Login(user DataStructures.User) (err error) {
 	}
 
 	return c.db.Login(user)
-}
-
-func (c *Controller) Logout(user DataStructures.User) (err error) {
-	// Delete the JWT token
-
-	return
 }

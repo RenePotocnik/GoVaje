@@ -5,7 +5,7 @@ import (
 	"vaja1/API"
 )
 
-// Create a Router struct and bind functions to it
+// Router struct to bind functions to it
 type Router struct {
 	engine *gin.Engine
 	api    API.Controller
@@ -27,6 +27,9 @@ func (r *Router) registerRoutes() (err error) {
 
 // registerTodoRoutes registers routes for the to-do group
 func (r *Router) registerTodoRoutes(todo *gin.RouterGroup) {
+	// Check if the user is logged in
+	todo.Use(r.api.AuthMiddleware)
+
 	// Paths to `/api/v1/task/`
 	todo.GET("/", r.api.GetTasks)
 	todo.POST("/", r.api.CreateTask)

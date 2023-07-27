@@ -5,11 +5,33 @@ import (
 	"net/http"
 	"strconv"
 	"vaja1/DataStructures"
+	"vaja1/Logic"
 )
 
+// AuthMiddleware checks if there's a valid JWT token in the authorisation header
+// Sets the `user_id` to the context
+func (a *Controller) AuthMiddleware(c *gin.Context) {
+	// Get the JWT token from the authorisation header
+	token := c.Request.Header.Get("Authorization")
+	// Check if the token is valid
+	valid, userID, err := Logic.ValidateToken(token)
+	if valid == false || err != nil {
+		// Return error 401 - Unauthorized if the token is not valid
+		c.String(http.StatusUnauthorized, err.Error())
+		c.Abort()
+		return
+	}
+
+	c.Set("user_id", userID)
+
+	// Continue with the request
+	c.Next()
+}
+
 func (a *Controller) GetTasks(c *gin.Context) {
+	userID := c.GetInt("user_id")
 	// Get the tasks from the `Logic/` not the database directly
-	tasks, err := a.c.GetTasks()
+	tasks, err := a.c.GetTasks(userID)
 	if err != nil {
 		// Return error 400 - Bad request if there was an error while getting the tasks
 		c.String(http.StatusInternalServerError, err.Error())
