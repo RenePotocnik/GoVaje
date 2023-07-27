@@ -3,7 +3,7 @@ package DataStructures
 type User struct {
 	Id       int    `json:"id"`
 	Username string `json:"username" binding:"required"`
-	Email    string `json:"email" binding:"required"`
+	PassHash string `json:"pass_hash" binding:"required"`
 }
 
 type Task struct {

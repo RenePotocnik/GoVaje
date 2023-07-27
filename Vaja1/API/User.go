@@ -3,32 +3,39 @@ package API
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
+	"vaja1/DataStructures"
+	"vaja1/Logic"
 )
 
-func (a *Controller) GetUsers(c *gin.Context) {
-	// Get the tasks from the `Logic/` not the database directly
-	users, err := a.c.GetUsers()
-	if err != nil {
-		c.String(http.StatusInternalServerError, err.Error())
-		return
-	}
-	c.JSON(http.StatusOK, users)
-}
+func (a *Controller) Login(c *gin.Context) {
+	var user DataStructures.User
 
-func (a *Controller) GetUserById(c *gin.Context) {
-	// Get the ID from the URL and convert it to int
-	userId, err := strconv.Atoi(c.Param("user_id"))
+	// Bind the data from the request body to the user struct (username, password)
+	err := c.BindJSON(&user)
 	if err != nil {
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
 
-	user, err := a.c.GetUserById(userId)
+	err = a.c.Login(user)
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.JSON(http.StatusOK, user)
 
+	token, err := Logic.GenerateToken(user)
+	if err != nil {
+		c.String(http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	// Set the JWT token in the authorisation header
+	c.Writer.Header().Set("Authorization", token)
+	c.JSON(http.StatusOK, token)
+}
+
+func (a *Controller) Logout(c *gin.Context) {
+	// Set the JWT token in the authorisation header to an empty string
+	c.Writer.Header().Set("Authorization", "")
+	c.JSON(http.StatusOK, "logged out")
 }

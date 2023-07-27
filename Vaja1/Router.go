@@ -15,14 +15,14 @@ func (r *Router) registerRoutes() (err error) {
 	// Path to `/api/v1`
 	api := r.engine.Group("/api/v1")
 
-	// user := api.Group("/user")
-	// r.registerUserRoutes(user)
-
 	todo := api.Group("/todo")
 	r.registerTodoRoutes(todo)
 
-	return
+	login := api.Group("/login")
+	logout := api.Group("/logout")
+	r.registerUserRoutes(login, logout)
 
+	return
 }
 
 // registerTodoRoutes registers routes for the to-do group
@@ -37,10 +37,10 @@ func (r *Router) registerTodoRoutes(todo *gin.RouterGroup) {
 	todo.DELETE("/:id", r.api.DeleteTask)
 }
 
-func (r *Router) registerUserRoutes(user *gin.RouterGroup) {
-	// Path to `/api/v1/user`
-	user.GET("/", r.api.GetUsers)
+func (r *Router) registerUserRoutes(login, logout *gin.RouterGroup) {
+	// Path to `/api/v1/login`
+	login.POST("/", r.api.Login)
 
-	// Path to `/api/v1/user/:user_id`
-	user.GET("/:user_id", r.api.GetUserById)
+	// Path to `/api/v1/logout`
+	logout.POST("/", r.api.Logout)
 }

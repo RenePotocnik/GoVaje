@@ -2,7 +2,7 @@ package MariaDB
 
 import (
 	"database/sql"
-	"golang.org/x/crypto/bcrypt"
+	"vaja1/Logic"
 )
 
 /*
@@ -28,10 +28,7 @@ func addUser(db *sql.DB) (err error) {
 	password := "demo"
 
 	// Encrypt the password
-	pass_hash, err := bcrypt.GenerateFromPassword([]byte(password), 14)
-	if err != nil {
-		return err
-	}
+	pass_hash, err := Logic.EncryptPassword(password)
 	_, err = db.Exec("INSERT INTO user (username, pass_hash) VALUES (?, ?)", username, pass_hash)
 	if err != nil {
 		return err

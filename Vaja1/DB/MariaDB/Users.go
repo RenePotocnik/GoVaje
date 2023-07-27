@@ -6,36 +6,9 @@ import (
 	"vaja1/DataStructures"
 )
 
-// GetUsers function from the DB interface
-func (db *MariaDB) GetUsers() (users []DataStructures.User, err error) {
-	rows, err := db.database.Query("SELECT user_id, username, email from user")
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	defer func() {
-		err2 := rows.Close()
-		if err2 != nil {
-			fmt.Println(err2.Error())
-		}
-	}()
-
-	var user DataStructures.User
-	users = make([]DataStructures.User, 0)
-
-	for rows.Next() {
-		err = rows.Scan(&user.Id, &user.Username, &user.Email)
-		if err != nil {
-			fmt.Println(err.Error())
-			return
-		}
-		users = append(users, user)
-	}
-	return
-}
-
-func (db *MariaDB) GetUserById(userId int) (user DataStructures.User, err error) {
-	rows, err := db.database.Query("SELECT user_id, username, email from user  WHERE user_id = ? LIMIT 1", userId)
+// GetUserByUsername gets the user struct from the database given a username
+func (db *MariaDB) GetUserByUsername(username string) (user DataStructures.User, err error) {
+	rows, err := db.database.Query("SELECT user_id, username, pass_hash from user WHERE username = ? LIMIT 1", username)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -48,15 +21,31 @@ func (db *MariaDB) GetUserById(userId int) (user DataStructures.User, err error)
 		}
 	}()
 
-	// Move to the next row (the first returned row), if ot does not exist, it means that the response is empty and does not exist
+	// Move to the next row (the first returned row), if it does not exist, it means that the response is empty and does not exist
 	if !rows.Next() {
 		err = errors.New("user does not exist")
 		return
 	}
 
-	err = rows.Scan(&user.Id, &user.Username, &user.Email)
+	// Get the Queried data from the row into the user struct
+	err = rows.Scan(&user.Id, &user.Username, &user.PassHash)
 	if err != nil {
 		fmt.Println(err.Error())
+		return
+	}
+	return
+}
+
+func (db *MariaDB) Login(user DataStructures.User) (err error) {
+	// Get the user from the database
+	userFromDB, err := db.GetUserByUsername(user.Username)
+	if err != nil {
+		return
+	}
+
+	// Check if the password is correct
+	if userFromDB.PassHash != user.PassHash {
+		err = errors.New("incorrect password")
 		return
 	}
 	return
