@@ -17,8 +17,7 @@ func (a *Controller) AuthMiddleware(c *gin.Context) {
 	valid, userID, err := Logic.ValidateToken(token)
 	if valid == false || err != nil {
 		// Return error 401 - Unauthorized if the token is not valid
-		c.String(http.StatusUnauthorized, err.Error())
-		c.Abort()
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
 		return
 	}
 
@@ -80,7 +79,7 @@ func (a *Controller) PutTaskById(c *gin.Context) {
 		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.String(http.StatusOK, "Task updated")
+	c.String(http.StatusCreated, "Task updated")
 }
 
 func (a *Controller) CreateTask(c *gin.Context) {
@@ -96,7 +95,7 @@ func (a *Controller) CreateTask(c *gin.Context) {
 		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.String(http.StatusOK, "Task created")
+	c.String(http.StatusCreated, "Task created")
 }
 
 func (a *Controller) DeleteTask(c *gin.Context) {

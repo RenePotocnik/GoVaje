@@ -49,9 +49,8 @@ CREATE TABLE IF NOT EXISTS task(
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     date_added TEXT NOT NULL,
-    predicted_date TEXT NOT NULL
-	user_id INT NOT NULL,
-	FOREIGN KEY (user_id) REFERENCES user(user_id)
+    predicted_date TEXT NOT NULL,
+	user_id INT NOT NULL
 )
 CHARACTER SET 'utf8mb4',
 COLLATE 'utf8mb4_unicode_ci'
@@ -65,5 +64,8 @@ CREATE TABLE IF NOT EXISTS user(
     pass_hash TEXT NOT NULL
 )
 CHARACTER SET 'utf8mb4',
-COLLATE 'utf8mb4_unicode_ci'
+COLLATE 'utf8mb4_unicode_ci';
+
+ALTER TABLE task
+ADD FOREIGN KEY (user_id) REFERENCES user(user_id);
 `

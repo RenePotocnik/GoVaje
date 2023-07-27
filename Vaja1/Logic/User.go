@@ -18,9 +18,10 @@ func EncryptPassword(password string) (pass_hash []byte, err error) {
 	return pass_hash, nil
 }
 
-func CheckPassword(password string, pass_hash []byte) (err error) {
+// CheckPassword checks if the given password matches the given hash
+func CheckPassword(password, pass_hash []byte) (err error) {
 	// Check if the password is correct
-	err = bcrypt.CompareHashAndPassword(pass_hash, []byte(password))
+	err = bcrypt.CompareHashAndPassword(pass_hash, password)
 	if err != nil {
 		return err
 	}
@@ -79,10 +80,11 @@ func (c *Controller) Login(user DataStructures.User) (err error) {
 		fmt.Println("Incorrect username")
 		return
 	}
-	if err = CheckPassword(user.PassHash, []byte(dbUser.PassHash)); err != nil {
+	if err = CheckPassword([]byte(user.PassHash), []byte(dbUser.PassHash)); err != nil {
 		fmt.Println("Incorrect password")
 		return
 	}
 
-	return c.db.Login(user)
+	//return c.db.Login(user)
+	return nil
 }
