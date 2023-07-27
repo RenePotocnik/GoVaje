@@ -74,10 +74,12 @@ func ValidateToken(token string) (valid bool, userID int, err error) {
 
 func (c *Controller) Login(user DataStructures.User) (err error) {
 	// Check if the user exists in the database
-	if _, err = c.db.GetUserByUsername(user.Username); err != nil {
+	dbUser, err := c.db.GetUserByUsername(user.Username)
+	if err != nil {
+		fmt.Println("Incorrect username")
 		return
 	}
-	if err = CheckPassword(user.PassHash, []byte(user.PassHash)); err != nil {
+	if err = CheckPassword(user.PassHash, []byte(dbUser.PassHash)); err != nil {
 		fmt.Println("Incorrect password")
 		return
 	}
