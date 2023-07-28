@@ -12,4 +12,5 @@ type Task struct {
 	Description   string `json:"description" binding:"required"`
 	DateAdded     string `json:"date_added" binding:"required"`
 	PredictedDate string `json:"predicted_date" binding:"required"`
+	UserId        int    `json:"user_id"`
 }

@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"vaja1/DataStructures"
-	"vaja1/Logic"
 )
 
 func (a *Controller) Login(c *gin.Context) {
@@ -17,13 +16,7 @@ func (a *Controller) Login(c *gin.Context) {
 		return
 	}
 
-	err = a.c.Login(user)
-	if err != nil {
-		c.String(http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	token, err := Logic.GenerateToken(user)
+	token, err := a.c.Login(user)
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 		return

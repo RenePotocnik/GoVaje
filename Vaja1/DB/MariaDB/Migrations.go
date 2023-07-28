@@ -29,14 +29,40 @@ func addUser(db *sql.DB) (err error) {
 
 	// Encrypt the password
 	pass_hash, err := Logic.EncryptPassword(password)
+	if err != nil {
+		return err
+	}
+
+	// Insert the user into the database
 	_, err = db.Exec("INSERT INTO user (username, pass_hash) VALUES (?, ?)", username, pass_hash)
 	if err != nil {
 		return err
 	}
 
-	// Change the `user_id` of all the tasks to the ID of the newly created user
-	demo_user_id, err := db.Query("SELECT user_id FROM user WHERE username = ? AND pass_hash = ?", username, pass_hash)
-	_, err = db.Exec("UPDATE task SET user_id = ?", demo_user_id)
+	// Get the demo user's id
+	rows, err := db.Query("SELECT user_id FROM user WHERE username = ?", username)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		err2 := rows.Close()
+		if err2 != nil {
+			return
+		}
+	}()
+	var userId int
+	if rows.Next() {
+		err = rows.Scan(&userId)
+		if err != nil {
+			return err
+		}
+	}
+
+	// Update the task table to reference the demo user
+	_, err = db.Exec("UPDATE task SET user_id = ?", userId)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

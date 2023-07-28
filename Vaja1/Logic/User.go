@@ -73,18 +73,26 @@ func ValidateToken(token string) (valid bool, userID int, err error) {
 	return
 }
 
-func (c *Controller) Login(user DataStructures.User) (err error) {
+func (c *Controller) Login(user DataStructures.User) (token string, err error) {
 	// Check if the user exists in the database
 	dbUser, err := c.db.GetUserByUsername(user.Username)
 	if err != nil {
 		fmt.Println("Incorrect username")
 		return
 	}
+
+	// Check if the password is correct
 	if err = CheckPassword([]byte(user.PassHash), []byte(dbUser.PassHash)); err != nil {
 		fmt.Println("Incorrect password")
 		return
 	}
 
+	// Generate a JWT token
+	token, err = GenerateToken(dbUser)
+	if err != nil {
+		return
+	}
+
 	//return c.db.Login(user)
-	return nil
+	return token, nil
 }

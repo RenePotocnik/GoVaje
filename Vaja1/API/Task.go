@@ -49,7 +49,9 @@ func (a *Controller) GetTaskById(c *gin.Context) {
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
-	user, err := a.c.GetTaskById(taskId)
+	userID := c.GetInt("user_id")
+
+	user, err := a.c.GetTaskById(taskId, userID)
 	if err != nil {
 		// Return error 500 - Internal server error if the task is not found or some other error occurs
 		c.String(http.StatusInternalServerError, err.Error())
@@ -74,12 +76,15 @@ func (a *Controller) PutTaskById(c *gin.Context) {
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
+	userId := c.GetInt("user_id")
+	task.UserId = userId
+
 	err = a.c.PutTaskById(taskId, task)
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 		return
 	}
-	c.String(http.StatusCreated, "Task updated")
+	c.String(http.StatusOK, "Task updated")
 }
 
 func (a *Controller) CreateTask(c *gin.Context) {
@@ -90,7 +95,9 @@ func (a *Controller) CreateTask(c *gin.Context) {
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
-	err = a.c.CreateTask(task)
+	userId := c.GetInt("user_id")
+
+	err = a.c.CreateTask(task, userId)
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 		return
@@ -106,7 +113,9 @@ func (a *Controller) DeleteTask(c *gin.Context) {
 		c.String(http.StatusBadRequest, err.Error())
 		return
 	}
-	err = a.c.DeleteTask(taskId)
+	userId := c.GetInt("user_id")
+
+	err = a.c.DeleteTask(taskId, userId)
 	if err != nil {
 		c.String(http.StatusInternalServerError, err.Error())
 		return
