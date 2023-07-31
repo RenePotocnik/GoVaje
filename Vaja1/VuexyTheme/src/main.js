@@ -1,7 +1,6 @@
 import Vue from 'vue'
-import { ModalPlugin } from 'bootstrap-vue'
+import { BootstrapVue, IconsPlugin, ModalPlugin } from 'bootstrap-vue'
 import VueCompositionAPI from '@vue/composition-api'
-
 import dayjs from 'dayjs'
 import router from './router'
 import store from './store'
@@ -21,6 +20,8 @@ Vue.prototype.$dayjs = dayjs
 
 // BSV Plugin Registration
 Vue.use(ModalPlugin)
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 
 // Composition API
 Vue.use(VueCompositionAPI)
@@ -28,6 +29,10 @@ Vue.use(VueCompositionAPI)
 // import core styles
 require('@core/scss/core.scss')
 import '@/main.css'
+
+// Import Bootstrap and BootstrapVue CSS files (order is important)
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 // import assets styles
 require('@/assets/scss/style.scss')

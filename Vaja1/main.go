@@ -15,6 +15,7 @@ import (
 	"vaja1/Logic"
 
 	"github.com/getsentry/sentry-go"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -52,6 +53,15 @@ func main() {
 	router.engine = gin.Default()
 	router.api = API.NewController(logic)
 
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:8080"}, // Replace with your origin
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Origin", "Content-Type", "Authorization"},
+		ExposedHeaders:   []string{"Content-Length"},
+		AllowCredentials: true,
+	})
+	handler := c.Handler(router.engine)
+
 	// Register HTTP routes
 	err = router.registerRoutes()
 	if err != nil {
@@ -67,7 +77,7 @@ func main() {
 	// Define the port, handler and timeouts for the HTTP server
 	srv := &http.Server{
 		Addr:         ":80",
-		Handler:      router.engine,
+		Handler:      handler,
 		ReadTimeout:  20 * time.Second,
 		WriteTimeout: 30 * time.Second,
 	}

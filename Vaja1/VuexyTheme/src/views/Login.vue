@@ -53,45 +53,38 @@
               class="auth-login-form mt-2"
               @submit.prevent
             >
-              <!-- email -->
+              <!-- username -->
               <b-form-group
-                label="Email"
-                label-for="login-email"
+                label="Username"
+                label-for="login-username"
               >
                 <validation-provider
                   #default="{ errors }"
-                  name="Email"
-                  rules="required|email"
+                  name="Username"
+                  rules="required"
                 >
                   <b-form-input
-                    id="login-email"
-                    v-model="userEmail"
+                    id="login-username"
+                    v-model="username"
                     :state="errors.length > 0 ? false:null"
-                    name="login-email"
-                    placeholder="john@example.com"
+                    name="login-username"
+                    placeholder="johnDoe"
                   />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
 
-              <!-- forgot password -->
-              <b-form-group>
-                <div class="d-flex justify-content-between">
-                  <label for="login-password">Password</label>
-                  <b-link :to="{name:'auth-forgot-password-v2'}">
-                    <small>Forgot Password?</small>
-                  </b-link>
-                </div>
+              <!-- password -->
+              <b-form-group
+                  label="Password"
+                  label-for="login-password"
+              >
                 <validation-provider
-                  #default="{ errors }"
-                  name="Password"
-                  rules="required"
+                    #default="{ errors }"
+                    name="Password"
+                    rules="required"
                 >
-                  <b-input-group
-                    class="input-group-merge"
-                    :class="errors.length > 0 ? 'is-invalid':null"
-                  >
-                    <b-form-input
+                  <b-form-input
                       id="login-password"
                       v-model="password"
                       :state="errors.length > 0 ? false:null"
@@ -99,29 +92,60 @@
                       :type="passwordFieldType"
                       name="login-password"
                       placeholder="············"
-                    />
-                    <b-input-group-append is-text>
-                      <feather-icon
-                        class="cursor-pointer"
-                        :icon="passwordToggleIcon"
-                        @click="togglePasswordVisibility"
-                      />
-                    </b-input-group-append>
-                  </b-input-group>
+                  />
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
 
-              <!-- checkbox -->
-              <b-form-group>
-                <b-form-checkbox
-                  id="remember-me"
-                  v-model="status"
-                  name="checkbox-1"
-                >
-                  Remember Me
-                </b-form-checkbox>
-              </b-form-group>
+              <!-- password: Old, with display/forgot password button -->
+              <!-- Issues with styling -->
+<!--              <b-form-group>-->
+<!--                <div class="d-flex justify-content-between">-->
+<!--                  <label for="login-password">Password</label>-->
+<!--                  <b-link :to="{name:'auth-forgot-password-v2'}">-->
+<!--                    <small>Forgot Password?</small>-->
+<!--                  </b-link>-->
+<!--                </div>-->
+<!--                <validation-provider-->
+<!--                  #default="{ errors }"-->
+<!--                  name="Password"-->
+<!--                  rules="required"-->
+<!--                >-->
+<!--                  <b-input-group-->
+<!--                    class="input-group-merge"-->
+<!--                    :class="errors.length > 0 ? 'is-invalid':null"-->
+<!--                  >-->
+<!--                    <b-form-input-->
+<!--                      id="login-password"-->
+<!--                      v-model="password"-->
+<!--                      :state="errors.length > 0 ? false:null"-->
+<!--                      class="form-control-merge"-->
+<!--                      :type="passwordFieldType"-->
+<!--                      name="login-password"-->
+<!--                      placeholder="············"-->
+<!--                    />-->
+<!--                    <b-input-group-append is-text>-->
+<!--                      <feather-icon-->
+<!--                        class="cursor-pointer"-->
+<!--                        :icon="passwordToggleIcon"-->
+<!--                        @click="togglePasswordVisibility"-->
+<!--                      />-->
+<!--                    </b-input-group-append>-->
+<!--                  </b-input-group>-->
+<!--                  <small class="text-danger">{{ errors[0] }}</small>-->
+<!--                </validation-provider>-->
+<!--              </b-form-group>-->
+
+              <!-- checkbox: Remember Me -->
+<!--              <b-form-group>-->
+<!--                <b-form-checkbox-->
+<!--                  id="remember-me"-->
+<!--                  v-model="status"-->
+<!--                  name="checkbox-1"-->
+<!--                >-->
+<!--                  Remember Me-->
+<!--                </b-form-checkbox>-->
+<!--              </b-form-group>-->
 
               <!-- submit buttons -->
               <b-button
@@ -135,50 +159,51 @@
             </b-form>
           </validation-observer>
 
-          <b-card-text class="text-center mt-2">
-            <span>New on our platform? </span>
-            <b-link :to="{name:'page-auth-register-v2'}">
-              <span>&nbsp;Create an account</span>
-            </b-link>
-          </b-card-text>
+          <!-- Create Account -->
+<!--          <b-card-text class="text-center mt-2">-->
+<!--            <span>New on our platform? </span>-->
+<!--            <b-link :to="{name:'page-auth-register-v2'}">-->
+<!--              <span>&nbsp;Create an account</span>-->
+<!--            </b-link>-->
+<!--          </b-card-text>-->
 
           <!-- divider -->
-          <div class="divider my-2">
-            <div class="divider-text">
-              or
-            </div>
-          </div>
+<!--          <div class="divider my-2">-->
+<!--            <div class="divider-text">-->
+<!--              or-->
+<!--            </div>-->
+<!--          </div>-->
 
           <!-- social buttons -->
-          <div class="auth-footer-btn d-flex justify-content-center">
-            <b-button
-              variant="facebook"
-              href="javascript:void(0)"
-            >
-              <feather-icon icon="FacebookIcon" />
-            </b-button>
-            <b-button
-              variant="twitter"
-              href="javascript:void(0)"
-            >
-              <feather-icon icon="TwitterIcon" />
-            </b-button>
-            <b-button
-              variant="google"
-              href="javascript:void(0)"
-            >
-              <feather-icon icon="MailIcon" />
-            </b-button>
-            <b-button
-              variant="github"
-              href="javascript:void(0)"
-            >
-              <feather-icon icon="GithubIcon" />
-            </b-button>
-          </div>
+<!--          <div class="auth-footer-btn d-flex justify-content-center">-->
+<!--            <b-button-->
+<!--              variant="facebook"-->
+<!--              href="javascript:void(0)"-->
+<!--            >-->
+<!--              <feather-icon icon="FacebookIcon" />-->
+<!--            </b-button>-->
+<!--            <b-button-->
+<!--              variant="twitter"-->
+<!--              href="javascript:void(0)"-->
+<!--            >-->
+<!--              <feather-icon icon="TwitterIcon" />-->
+<!--            </b-button>-->
+<!--            <b-button-->
+<!--              variant="google"-->
+<!--              href="javascript:void(0)"-->
+<!--            >-->
+<!--              <feather-icon icon="MailIcon" />-->
+<!--            </b-button>-->
+<!--            <b-button-->
+<!--              variant="github"-->
+<!--              href="javascript:void(0)"-->
+<!--            >-->
+<!--              <feather-icon icon="GithubIcon" />-->
+<!--            </b-button>-->
+<!--          </div>-->
         </b-col>
       </b-col>
-    <!-- /Login-->
+<!--     /Login-->
     </b-row>
   </div>
 </template>
@@ -190,10 +215,11 @@ import VuexyLogo from '@core/layouts/components/Logo.vue'
 import {
   BRow, BCol, BLink, BFormGroup, BFormInput, BInputGroupAppend, BInputGroup, BFormCheckbox, BCardText, BCardTitle, BImg, BForm, BButton,
 } from 'bootstrap-vue'
-import { required, email } from '@validations'
+import { required } from '@validations'
 import { togglePasswordVisibility } from '@core/mixins/ui/forms'
 import store from '@/store/index'
 import ToastificationContent from '@core/components/toastification/ToastificationContent.vue'
+import axios from "axios";
 
 export default {
   components: {
@@ -217,19 +243,18 @@ export default {
   mixins: [togglePasswordVisibility],
   data() {
     return {
-      status: '',
+      // status: '',
       password: '',
-      userEmail: '',
+      username: '',
       sideImg: require('@/assets/images/pages/login-v2.svg'),
-      // validation rulesimport store from '@/store/index'
+      // validation rules import store from '@/store/index'
       required,
-      email,
     }
   },
   computed: {
-    passwordToggleIcon() {
-      return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'
-    },
+    // passwordToggleIcon() {
+    //   return this.passwordFieldType === 'password' ? 'EyeIcon' : 'EyeOffIcon'
+    // },
     imgUrl() {
       if (store.state.appConfig.layout.skin === 'dark') {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
@@ -251,11 +276,41 @@ export default {
               variant: 'success',
             },
           })
+
+          axios.post('http://localhost:80/api/v1/login', {
+            "username": this.username,
+            "pass_hash": this.password
+          })
+              .then(response => {
+                localStorage.setItem('token', response.data);
+                this.$toast({
+                  component: ToastificationContent,
+                  props: {
+                    title: 'Logged In Successfully',
+                    icon: 'CheckIcon',
+                    variant: 'success',
+                  },
+                })
+                this.$router.push('/');
+              })
+              .catch(error => {
+                // Display an error message
+                console.error(error);
+                this.$toast({
+                  component: ToastificationContent,
+                  props: {
+                    title: 'Login Failed',
+                    icon: 'XIcon',
+                    variant: 'danger',
+                  },
+                })
+              });
         }
       })
     },
   },
 }
+
 </script>
 
 <style lang="scss">
