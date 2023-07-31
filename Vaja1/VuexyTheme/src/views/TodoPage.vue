@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card title="Todo App 📝">
+    <b-card title="Add new task">
       <b-form @submit.prevent="addTask">
         <b-form-group label="Title">
           <b-form-input
@@ -26,8 +26,18 @@
 
         <b-button type="submit" variant="primary">Add Task</b-button>
       </b-form>
+    </b-card>
 
-      <!-- task list goes here -->
+    <hr>
+
+    <b-card v-for="(task, index) in tasks" :key="task.id">
+      <template #header>
+        <h3>{{ task.title }}</h3>
+      </template>
+      {{ task.description }} <br>
+      <p>Date added: {{ task.date_added }}</p>
+        <b-button class="mr-1" @click="completeTask(index)" variant="outline-success">Complete Task</b-button>
+        <b-button class="mr-1" @click="removeTask(index)" variant="outline-danger">Delete Task</b-button>
     </b-card>
   </div>
 </template>
@@ -84,22 +94,24 @@ export default {
         user_id: 0 // TODO: Add dynamically based on the logged in user
       }
     },
-    async removeTodo(index) {
-      await axios.delete(`http://localhost:80/api/v1/todo/${this.todos[index].id}`)
 
-      this.todos.splice(index, 1)
+    async removeTask(index) {
+      await axios.delete(`http://localhost:80/api/v1/todo/${this.tasks[index].id}`);
+      this.tasks.splice(index, 1);
     },
-    async completeTodo(index) {
-      await axios.delete(`http://localhost:80/api/v1/todo/${this.todos[index].id}`)
 
-      this.todos.splice(index, 1)
+    async completeTask(index) {
+      // await axios.post(`http://localhost:80/api/v1/to do/${this.tasks[index].id}/complete`);
+      await axios.delete(`http://localhost:80/api/v1/todo/${this.tasks[index].id}`);
+
+      this.tasks.splice(index, 1);
     },
+
   },
   async created() {
+    const response = await axios.get('http://localhost:80/api/v1/todo/');
 
-    const response = await axios.get('http://localhost:80/api/v1/todo/')
-
-    this.todos = response.data
+    this.tasks = response.data;
   }
 }
 </script>
