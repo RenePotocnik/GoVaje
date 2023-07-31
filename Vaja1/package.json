@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "axios": "^1.4.0",
-    "bootstrap-vue": "^2.23.1"
+    "bootstrap-vue": "^2.23.1",
+    "vuejs-datepicker": "^1.6.2"
   }
 }
