@@ -9,9 +9,9 @@ export default [
         icon: 'HomeIcon'
       },
       {
-        title: 'Second Page',
-        route: 'second-page',
-        icon: 'FileIcon'
+        title: 'Todo App',
+        route: 'todo-page',
+        icon: 'CheckIcon'
       }
     ]
   }

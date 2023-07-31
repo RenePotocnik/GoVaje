@@ -16,6 +16,7 @@ import BellIcon from 'vue-feather-icons/icons/BellIcon'
 import SearchIcon from 'vue-feather-icons/icons/SearchIcon'
 import UserIcon from 'vue-feather-icons/icons/UserIcon'
 import LogOutIcon from 'vue-feather-icons/icons/LogOutIcon'
+import CheckIcon from 'vue-feather-icons/icons/CheckIcon'
 
 const icons = {
   HomeIcon,
@@ -34,6 +35,7 @@ const icons = {
   SearchIcon,
   UserIcon,
   LogOutIcon,
+  CheckIcon,
 }
 
 export default {

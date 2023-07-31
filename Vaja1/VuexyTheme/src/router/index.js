@@ -32,14 +32,14 @@ const router = new VueRouter({
       }
     },
     {
-      path: '/second-page',
-      name: 'second-page',
-      component: () => import('@/views/SecondPage.vue'),
+      path: '/todo-page',
+      name: 'todo-page',
+      component: () => import('@/views/TodoPage.vue'),
       meta: {
-        pageTitle: 'Second Page',
+        pageTitle: 'Todo App',
         breadcrumb: [
           {
-            text: 'Second Page',
+            text: 'Todo App',
             active: true
           }
         ]
