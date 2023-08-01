@@ -283,6 +283,7 @@ export default {
           })
               .then(response => {
                 localStorage.setItem('token', response.data);
+                localStorage.setItem('username', this.username);
                 this.$toast({
                   component: ToastificationContent,
                   props: {

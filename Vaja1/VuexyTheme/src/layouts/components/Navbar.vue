@@ -30,9 +30,9 @@
         <template #button-content>
           <div class="d-sm-flex d-none user-nav">
             <p class="user-name font-weight-bolder mb-0">
-              John Doe
+              {{ username }}
             </p>
-            <span class="user-status">Admin</span>
+            <span class="user-status"></span>
           </div>
           <b-avatar
             size="40"
@@ -44,45 +44,30 @@
           />
         </template>
 
-        <b-dropdown-item link-class="d-flex align-items-center">
+        <b-dropdown-item link-class="d-flex align-items-center"
+                         @click="$router.push('/')">
           <feather-icon
             size="16"
-            icon="UserIcon"
+            icon="HomeIcon"
             class="mr-50"
           />
-          <span>Profile</span>
+          <span>Home</span>
         </b-dropdown-item>
 
-        <b-dropdown-item link-class="d-flex align-items-center">
+        <b-dropdown-item link-class="d-flex align-items-center"
+                         @click="$router.push('todo-page')">
           <feather-icon
             size="16"
-            icon="MailIcon"
+            icon="CheckIcon"
             class="mr-50"
           />
-          <span>Inbox</span>
-        </b-dropdown-item>
-
-        <b-dropdown-item link-class="d-flex align-items-center">
-          <feather-icon
-            size="16"
-            icon="CheckSquareIcon"
-            class="mr-50"
-          />
-          <span>Task</span>
-        </b-dropdown-item>
-
-        <b-dropdown-item link-class="d-flex align-items-center">
-          <feather-icon
-            size="16"
-            icon="MessageSquareIcon"
-            class="mr-50"
-          />
-          <span>Chat</span>
+          <span>Tasks</span>
         </b-dropdown-item>
 
         <b-dropdown-divider />
 
-        <b-dropdown-item link-class="d-flex align-items-center">
+        <b-dropdown-item link-class="d-flex align-items-center"
+                         @click="logoutUser">
           <feather-icon
             size="16"
             icon="LogOutIcon"
@@ -100,8 +85,14 @@ import {
   BLink, BNavbarNav, BNavItemDropdown, BDropdownItem, BDropdownDivider, BAvatar,
 } from 'bootstrap-vue'
 import DarkToggler from '@core/layouts/components/app-navbar/components/DarkToggler.vue'
+import {logoutUser} from "@/main";
 
 export default {
+  methods: {
+    logoutUser() {
+      logoutUser(this);
+    },
+  },
   components: {
     BLink,
     BNavbarNav,
@@ -112,6 +103,11 @@ export default {
 
     // Navbar Components
     DarkToggler,
+  },
+  data() {
+    return {
+      username: localStorage.getItem('username') || 'User', // Default to 'User' if no username in local storage
+    }
   },
   props: {
     toggleVerticalMenuActive: {

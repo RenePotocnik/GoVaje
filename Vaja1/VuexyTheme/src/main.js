@@ -40,6 +40,7 @@ require('@/assets/scss/style.scss')
 Vue.config.productionTip = false
 
 import i18n from '@/libs/i18n'
+import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 
 new Vue({
   router,
@@ -47,3 +48,19 @@ new Vue({
   i18n,
   render: h => h(App)
 }).$mount('#app')
+
+export function logoutUser(vueInstance) {
+  localStorage.removeItem('token');
+  localStorage.removeItem('username');
+  vueInstance.$router.push('/login').then(r => console.log(r));
+  console.log("User Logged Out")
+  vueInstance.$toast({
+    component: ToastificationContent,
+    props: {
+      title: 'Logged Out',
+      icon: 'LogOutIcon',
+      variant: 'danger',
+    },
+  })
+}
+

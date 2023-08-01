@@ -47,8 +47,7 @@
 import { BCard, BForm, BFormInput, BButton, BListGroup, BListGroupItem } from 'bootstrap-vue'
 import axios from 'axios'
 import jwt_decode from 'jwt-decode';
-import router from "@/router";
-import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
+import {logoutUser} from "@/main";
 
 // Check if token is expired before every request
 axios.interceptors.request.use(
@@ -56,8 +55,10 @@ axios.interceptors.request.use(
       let token = localStorage.getItem('token');
       if (isTokenExpired(token)) {
         // Token is expired, remove it from local storage
-        localStorage.removeItem('token');
-        router.push('/login');
+        // localStorage.removeItem('token');
+        // localStorage.removeItem('username');
+        // router.push('/login');
+        logoutUser(this);
       } else {
         config.headers['Authorization'] = token;
       }
