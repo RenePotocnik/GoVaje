@@ -58,14 +58,6 @@ axios.interceptors.request.use(
       let token = localStorage.getItem('token');
       if (isTokenExpired(token)) {
         // Token is expired, remove it from local storage
-        this.$toast({
-          component: ToastificationContent,
-          props: {
-            title: 'Session Expired',
-            icon: 'XIcon',
-            variant: 'danger',
-          },
-        })
         logoutUser(this);
       } else {
         config.headers['Authorization'] = token;
@@ -102,7 +94,15 @@ export default {
 
   methods: {
     async addTask() {
-      if (this.newTask.title.trim().length === 0 || this.newTask.description.trim().length === 0) {
+      if (this.newTask.title.trim().length === 0 || this.newTask.description.trim().length === 0 || this.newTask.predicted_date.trim().length === 0) {
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'All fields are required',
+            icon: 'MenuIcon',
+            variant: 'info',
+          },
+        })
         return
       }
 

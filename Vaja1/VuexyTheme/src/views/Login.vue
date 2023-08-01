@@ -96,58 +96,6 @@
                   <small class="text-danger">{{ errors[0] }}</small>
                 </validation-provider>
               </b-form-group>
-
-              <!-- password: Old, with display/forgot password button -->
-              <!-- Issues with styling -->
-<!--              <b-form-group>-->
-<!--                <div class="d-flex justify-content-between">-->
-<!--                  <label for="login-password">Password</label>-->
-<!--                  <b-link :to="{name:'auth-forgot-password-v2'}">-->
-<!--                    <small>Forgot Password?</small>-->
-<!--                  </b-link>-->
-<!--                </div>-->
-<!--                <validation-provider-->
-<!--                  #default="{ errors }"-->
-<!--                  name="Password"-->
-<!--                  rules="required"-->
-<!--                >-->
-<!--                  <b-input-group-->
-<!--                    class="input-group-merge"-->
-<!--                    :class="errors.length > 0 ? 'is-invalid':null"-->
-<!--                  >-->
-<!--                    <b-form-input-->
-<!--                      id="login-password"-->
-<!--                      v-model="password"-->
-<!--                      :state="errors.length > 0 ? false:null"-->
-<!--                      class="form-control-merge"-->
-<!--                      :type="passwordFieldType"-->
-<!--                      name="login-password"-->
-<!--                      placeholder="············"-->
-<!--                    />-->
-<!--                    <b-input-group-append is-text>-->
-<!--                      <feather-icon-->
-<!--                        class="cursor-pointer"-->
-<!--                        :icon="passwordToggleIcon"-->
-<!--                        @click="togglePasswordVisibility"-->
-<!--                      />-->
-<!--                    </b-input-group-append>-->
-<!--                  </b-input-group>-->
-<!--                  <small class="text-danger">{{ errors[0] }}</small>-->
-<!--                </validation-provider>-->
-<!--              </b-form-group>-->
-
-              <!-- checkbox: Remember Me -->
-<!--              <b-form-group>-->
-<!--                <b-form-checkbox-->
-<!--                  id="remember-me"-->
-<!--                  v-model="status"-->
-<!--                  name="checkbox-1"-->
-<!--                >-->
-<!--                  Remember Me-->
-<!--                </b-form-checkbox>-->
-<!--              </b-form-group>-->
-
-              <!-- submit buttons -->
               <b-button
                 type="submit"
                 variant="primary"
@@ -158,52 +106,8 @@
               </b-button>
             </b-form>
           </validation-observer>
-
-          <!-- Create Account -->
-<!--          <b-card-text class="text-center mt-2">-->
-<!--            <span>New on our platform? </span>-->
-<!--            <b-link :to="{name:'page-auth-register-v2'}">-->
-<!--              <span>&nbsp;Create an account</span>-->
-<!--            </b-link>-->
-<!--          </b-card-text>-->
-
-          <!-- divider -->
-<!--          <div class="divider my-2">-->
-<!--            <div class="divider-text">-->
-<!--              or-->
-<!--            </div>-->
-<!--          </div>-->
-
-          <!-- social buttons -->
-<!--          <div class="auth-footer-btn d-flex justify-content-center">-->
-<!--            <b-button-->
-<!--              variant="facebook"-->
-<!--              href="javascript:void(0)"-->
-<!--            >-->
-<!--              <feather-icon icon="FacebookIcon" />-->
-<!--            </b-button>-->
-<!--            <b-button-->
-<!--              variant="twitter"-->
-<!--              href="javascript:void(0)"-->
-<!--            >-->
-<!--              <feather-icon icon="TwitterIcon" />-->
-<!--            </b-button>-->
-<!--            <b-button-->
-<!--              variant="google"-->
-<!--              href="javascript:void(0)"-->
-<!--            >-->
-<!--              <feather-icon icon="MailIcon" />-->
-<!--            </b-button>-->
-<!--            <b-button-->
-<!--              variant="github"-->
-<!--              href="javascript:void(0)"-->
-<!--            >-->
-<!--              <feather-icon icon="GithubIcon" />-->
-<!--            </b-button>-->
-<!--          </div>-->
         </b-col>
       </b-col>
-<!--     /Login-->
     </b-row>
   </div>
 </template>
