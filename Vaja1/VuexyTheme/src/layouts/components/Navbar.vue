@@ -90,7 +90,7 @@ import {logoutUser} from "@/main";
 export default {
   methods: {
     logoutUser() {
-      logoutUser(this);
+      logoutUser();
     },
   },
   components: {

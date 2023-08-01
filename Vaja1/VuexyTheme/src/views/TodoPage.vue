@@ -29,15 +29,17 @@
 
     <hr>
 
-    <b-card v-for="(task, index) in tasks" :key="task.id">
-      <template #header>
-        <h3>{{ task.title }}</h3>
-      </template>
-      <p>{{ task.description }}</p>
-      <p>Date added: <strong>{{ task.date_added }}</strong> | Predicted date of completion: <strong>{{ task.predicted_date }}</strong></p>
-      <b-button class="mr-1" @click="completeTask(index)" variant="outline-success">Complete</b-button>
-      <b-button class="mr-1" @click="removeTask(index)" variant="outline-danger">Delete</b-button>
-    </b-card>
+    <transition-group name="list" tag="div">
+      <b-card v-for="(task, index) in tasks" :key="task.id">
+        <template #header>
+          <h3>{{ task.title }}</h3>
+        </template>
+        <p>{{ task.description }}</p>
+        <p>Date added: <strong>{{ task.date_added }}</strong> | Predicted date of completion: <strong>{{ task.predicted_date }}</strong></p>
+        <b-button class="mr-1" @click="completeTask(index)" variant="outline-success">Complete</b-button>
+        <b-button class="mr-1" @click="removeTask(index)" variant="outline-danger">Delete</b-button>
+      </b-card>
+    </transition-group>
 
   </div>
 </template>
@@ -48,6 +50,7 @@ import { BCard, BForm, BFormInput, BButton, BListGroup, BListGroupItem } from 'b
 import axios from 'axios'
 import jwt_decode from 'jwt-decode';
 import {logoutUser} from "@/main";
+import ToastificationContent from "@core/components/toastification/ToastificationContent.vue";
 
 // Check if token is expired before every request
 axios.interceptors.request.use(
@@ -55,9 +58,14 @@ axios.interceptors.request.use(
       let token = localStorage.getItem('token');
       if (isTokenExpired(token)) {
         // Token is expired, remove it from local storage
-        // localStorage.removeItem('token');
-        // localStorage.removeItem('username');
-        // router.push('/login');
+        this.$toast({
+          component: ToastificationContent,
+          props: {
+            title: 'Session Expired',
+            icon: 'XIcon',
+            variant: 'danger',
+          },
+        })
         logoutUser(this);
       } else {
         config.headers['Authorization'] = token;
@@ -98,7 +106,7 @@ export default {
         return
       }
 
-      const response = await axios.post('http://localhost:80/api/v1/todo/', this.newTask)
+      let response = await axios.post('http://localhost:80/api/v1/todo/', this.newTask)
 
       this.tasks.push(response.data)
 
@@ -110,11 +118,34 @@ export default {
         predicted_date: '',
         user_id: getTokenId(localStorage.getItem('token'))
       }
+
+      response = await axios.get('http://localhost:80/api/v1/todo/');
+      this.tasks = response.data;
+
+      this.$toast({
+        component: ToastificationContent,
+        props: {
+          title: 'Task Created',
+          icon: 'CheckIcon',
+          variant: 'success',
+        },
+      })
+
     },
 
     async removeTask(index) {
       await axios.delete(`http://localhost:80/api/v1/todo/${this.tasks[index].id}`);
       this.tasks.splice(index, 1);
+
+      this.$toast({
+        component: ToastificationContent,
+        props: {
+          title: 'Task Removed',
+          icon: 'XIcon',
+          variant: 'danger',
+        },
+      })
+
     },
 
     async completeTask(index) {
@@ -122,6 +153,15 @@ export default {
       await axios.delete(`http://localhost:80/api/v1/todo/${this.tasks[index].id}`);
 
       this.tasks.splice(index, 1);
+
+      this.$toast({
+        component: ToastificationContent,
+        props: {
+          title: 'Task Completed',
+          icon: 'CheckIcon',
+          variant: 'success',
+        },
+      })
     },
   },
   async created() {

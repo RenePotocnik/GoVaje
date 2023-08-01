@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.list-move,
+.list-enter-active,
+.list-leave-active {
+    transition: all 1s ease;
+    width: 100%;
+}
+.list-enter-from,
+.list-leave-to {
+    opacity: 0;
+    transform: translateX(100%);
+}
+.list-leave-active {
+    position: absolute;
+}

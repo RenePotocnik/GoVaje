@@ -31,7 +31,7 @@ func CheckPassword(password, pass_hash []byte) (err error) {
 // GenerateToken generates a JWT token containing the `user_id` and the token's lifespan
 func GenerateToken(user DataStructures.User) (signedToken string, err error) {
 	// Generate a JWT token which includes the `user_id` and the timeout
-	tokenExpireTime := time.Now().Add(time.Minute * 2)
+	tokenExpireTime := time.Now().Add(time.Minute * 30)
 
 	claims := jwt.MapClaims{}
 	claims["id"] = user.Id

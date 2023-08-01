@@ -49,18 +49,10 @@ new Vue({
   render: h => h(App)
 }).$mount('#app')
 
-export function logoutUser(vueInstance) {
+export function logoutUser() {
   localStorage.removeItem('token');
   localStorage.removeItem('username');
-  vueInstance.$router.push('/login').then(r => console.log(r));
-  console.log("User Logged Out")
-  vueInstance.$toast({
-    component: ToastificationContent,
-    props: {
-      title: 'Logged Out',
-      icon: 'LogOutIcon',
-      variant: 'danger',
-    },
-  })
+  router.push('/login').then(r => console.log(r));
+  console.log("User Logged Out");
 }
 
