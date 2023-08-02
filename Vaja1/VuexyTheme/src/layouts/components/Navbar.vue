@@ -19,6 +19,31 @@
     <!-- Left Col -->
     <div class="bookmark-wrapper align-items-center flex-grow-1 d-none d-lg-flex">
       <dark-Toggler class="d-none d-lg-block" />
+<!--        <h3 style="margin: 0 0 0 1vw;"> {{ $route.meta.pageTitle }} </h3>-->
+      <b-col cols="12">
+        <h2 class="content-header-title float-left pr-1 mb-0">
+          {{ $route.meta.pageTitle }}
+        </h2>
+        <div class="breadcrumb-wrapper">
+          <b-breadcrumb>
+            <b-breadcrumb-item to="/">
+              <feather-icon
+                  icon="HomeIcon"
+                  size="16"
+                  class="align-text-top"
+              />
+            </b-breadcrumb-item>
+            <b-breadcrumb-item
+                v-for="item in $route.meta.breadcrumb"
+                :key="item.text"
+                :active="item.active"
+                :to="item.to"
+            >
+              {{ item.text }}
+            </b-breadcrumb-item>
+          </b-breadcrumb>
+        </div>
+      </b-col>
     </div>
 
     <b-navbar-nav class="nav align-items-center ml-auto">
