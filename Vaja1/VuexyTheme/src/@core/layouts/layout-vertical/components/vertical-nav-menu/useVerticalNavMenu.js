@@ -17,7 +17,8 @@ export default function useVerticalNavMenu(props) {
   // ------------------------------------------------
   const collapseTogglerIcon = computed(() => {
     if (props.isVerticalMenuActive) {
-      return isVerticalMenuCollapsed.value ? 'unpinned' : 'pinned'
+      return isVerticalMenuCollapsed.value ? 'pinned' : 'pinned'
+      // return isVerticalMenuCollapsed.value ? 'unpinned' : 'pinned'
     }
     return 'close'
   })
