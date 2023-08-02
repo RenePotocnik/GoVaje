@@ -207,24 +207,23 @@ function getTokenId(token) {
 
 <style>
 
-.list-move,
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-  width: 100%;
+.list-move {  /* The class of all moving elements */
+  transition: all 1s ease;
 }
 
-.list-leave-active {
-  position: absolute;
-}
-
-.list-enter-from {
-  transform: translateX(-100%);
+.list-enter-to {  /* The position of the element before the transition */
+  transform: translateX(-50%);
   opacity: 0;
 }
-.list-leave-to {
+
+.list-leave-to {  /* The position of the element after the transition */
   transform: translateX(100%);
   opacity: 0;
+}
+.list-leave-active {
+  position: absolute;
+  transition: all 1s ease;
+  width: 100%;
 }
 
 </style>
