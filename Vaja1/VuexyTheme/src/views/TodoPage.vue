@@ -204,3 +204,27 @@ function getTokenId(token) {
 }
 
 </script>
+
+<style>
+
+.list-move,
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+  width: 100%;
+}
+
+.list-leave-active {
+  position: absolute;
+}
+
+.list-enter-from {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+.list-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+</style>
