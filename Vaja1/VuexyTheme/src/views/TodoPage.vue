@@ -20,6 +20,8 @@
           <b-form-datepicker
               v-model="newTask.predicted_date"
               placeholder="When will the task be completed?"
+              format="dd.MM.yyyy"
+              value-as-date
           ></b-form-datepicker>
         </b-form-group>
 
@@ -84,7 +86,7 @@ export default {
       newTask: {
         title: '',
         description: '',
-        date_added: new Date().toISOString().substring(0,10), // Assuming the date format is "YYYY-MM-DD"
+        date_added: new Date().toISOString().substring(0,10).split('-').reverse().join('. '), // Change the date format to "DD. MM. YYYY"
         predicted_date: '',
         user_id: getTokenId(localStorage.getItem('token'))
       },
@@ -94,6 +96,9 @@ export default {
 
   methods: {
     async addTask() {
+  // Change the date object to "DD. MM. YYYY" and convert it to string
+      this.newTask.predicted_date = this.newTask.predicted_date.toLocaleString().substring(0,10).split('/').join('. ')
+
       if (this.newTask.title.trim().length === 0 || this.newTask.description.trim().length === 0 || this.newTask.predicted_date.trim().length === 0) {
         this.$toast({
           component: ToastificationContent,
