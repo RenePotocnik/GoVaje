@@ -86,7 +86,7 @@ export default {
       newTask: {
         title: '',
         description: '',
-        date_added: new Date().toISOString().substring(0,10).split('-').reverse().join('. '), // Change the date format to "DD. MM. YYYY"
+        date_added: new Date().toLocaleString().substring(0,10).split('/').join('. '), // Change the date format to "DD. MM. YYYY"
         predicted_date: '',
         user_id: getTokenId(localStorage.getItem('token'))
       },
