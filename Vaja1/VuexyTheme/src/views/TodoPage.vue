@@ -29,17 +29,26 @@
       </b-form>
     </b-card>
 
+    <b-card title="Search tasks">
+      <b-form-group label="Search by title">
+        <b-form-input
+            v-model="searchInput"
+            placeholder="Enter task title"
+        ></b-form-input>
+      </b-form-group>
+    </b-card>
+
     <hr>
 
     <transition-group name="list" tag="div">
-      <b-card v-for="(task, index) in tasks" :key="task.id">
+      <b-card v-for="(task) in filteredTasks" :key="task.id">
         <template #header>
           <h3>{{ task.title }}</h3>
         </template>
         <p>{{ task.description }}</p>
         <p>Date added: <strong>{{ task.date_added }}</strong> | Predicted date of completion: <strong>{{ task.predicted_date }}</strong></p>
-        <b-button class="mr-1" @click="completeTask(index)" variant="outline-success">Complete</b-button>
-        <b-button class="mr-1" @click="removeTask(index)" variant="outline-danger">Delete</b-button>
+        <b-button class="mr-1" @click="completeTask(task.id)" variant="outline-success">Complete</b-button>
+        <b-button class="mr-1" @click="removeTask(task.id)" variant="outline-danger">Delete</b-button>
       </b-card>
     </transition-group>
 
@@ -90,9 +99,29 @@ export default {
         predicted_date: '',
         user_id: getTokenId(localStorage.getItem('token'))
       },
-      tasks: []
+      tasks: [],
+      searchInput: '',
     }
   },
+
+  computed: {
+    filteredTasks() {
+      if (this.searchInput) {
+        let filteredTasks = this.tasks.filter(task => task.title.toLowerCase().trim().includes(this.searchInput.toLowerCase().trim()));
+        if (filteredTasks.length === 0) {
+          filteredTasks = [
+              {title: 'No tasks found',
+                id: -1,
+                description: 'The task you are looking for might not exist. Is there a typo in your search?',
+                date_added: 'Right now',
+                predicted_date: 'As soon as you find the task'}]
+        }
+        return filteredTasks;
+      }
+      return this.tasks;
+    }
+  },
+
 
   methods: {
     async addTask() {
@@ -138,9 +167,10 @@ export default {
 
     },
 
-    async removeTask(index) {
-      await axios.delete(`http://localhost:80/api/v1/todo/${this.tasks[index].id}`);
-      this.tasks.splice(index, 1);
+    async removeTask(taskId) {
+      await axios.delete(`http://localhost:80/api/v1/todo/${taskId}`);
+      // this.tasks.id[taskId].splice(taskId, 1)
+      this.tasks = (await axios.get('http://localhost:80/api/v1/todo/')).data;
 
       this.$toast({
         component: ToastificationContent,
@@ -150,14 +180,12 @@ export default {
           variant: 'danger',
         },
       })
-
     },
 
-    async completeTask(index) {
+    async completeTask(taskId) {
       // await axios.post(`http://localhost:80/api/v1/to do/${this.tasks[index].id}/complete`);
-      await axios.delete(`http://localhost:80/api/v1/todo/${this.tasks[index].id}`);
-
-      this.tasks.splice(index, 1);
+      await axios.delete(`http://localhost:80/api/v1/todo/${taskId}`);
+      this.tasks = (await axios.get('http://localhost:80/api/v1/todo/')).data;
 
       this.$toast({
         component: ToastificationContent,
@@ -208,7 +236,7 @@ function getTokenId(token) {
 <style>
 
 .list-move {  /* The class of all moving elements */
-  transition: all 1s ease;
+  transition: all 0.5s ease;
 }
 
 .list-enter-to {  /* The position of the element before the transition */
@@ -218,11 +246,11 @@ function getTokenId(token) {
 
 .list-leave-to {  /* The position of the element after the transition */
   transform: translateX(100%);
-  opacity: 0;
+  opacity: 100;
 }
 .list-leave-active {
   position: absolute;
-  transition: all 1s ease;
+  transition: all 0.5s ease;
   width: 100%;
 }
 
