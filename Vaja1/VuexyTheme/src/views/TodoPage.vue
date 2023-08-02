@@ -119,7 +119,7 @@ export default {
       this.newTask = {
         title: '',
         description: '',
-        date_added: new Date().toISOString().substring(0,10),
+        date_added: new Date().toLocaleString().substring(0,10).split('/').join('. '),
         predicted_date: '',
         user_id: getTokenId(localStorage.getItem('token'))
       }
